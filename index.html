@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BlitzRun MVP</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>BlitzRun <span class="badge">MVP</span></h1>
+      <p class="tag">Run • Collect • Get Airdrops</p>
+    </header>
+
+    <section class="panel">
+      <div class="stats">
+        <div class="stat"><label>Coins</label><span id="coins">0</span></div>
+        <div class="stat"><label>Airdrop (est.)</label><span id="airdrop">0</span></div>
+        <div class="stat"><label>Today</label><span id="today">0 / 5000</span></div>
+      </div>
+      <div class="actions">
+        <button id="btnRun">Run +10</button>
+        <button id="btnJump">Jump +25</button>
+        <button id="btnSync" class="primary">Sync to DB</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Wallet</h2>
+      <div class="row">
+        <input id="wallet" placeholder="Paste your Phantom address" />
+        <button id="btnSaveWallet">Save</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Referral</h2>
+      <p>Share this link (first visit only) = bonus later:</p>
+      <div class="row">
+        <input id="refLink" readonly />
+        <button id="btnCopy">Copy</button>
+      </div>
+    </section>
+
+    <section class="panel links">
+      <a href="https://x.com/lazyapereboot?s=21" target="_blank">X</a>
+      <a href="https://t.me/lazyaperreboot" target="_blank">Telegram</a>
+      <a href="https://www.notion.so/LazyApe-Reboot-Official-Project-Page-247c600c319c80c4a18bf4460cea5f23?source=copy_link" target="_blank">Notion</a>
+      <a href="https://docs.google.com/forms/d/1PbTHXkMTFTQSzOj4ch9owbMOVbqd_bvXfD5GeNeuwFI/viewform?edit_requested=true" target="_blank">Presale</a>
+    </section>
+
+    <footer class="foot">
+      <small>Connected to Supabase project: <code>https://jijtryjvptrkbearkhsl.supabase.co</code></small>
+    </footer>
+  </div>
+</body>
+</html>
