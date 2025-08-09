@@ -1,62 +1,60 @@
-console.log('BlitzRun app.js loaded');
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BlitzRun MVP</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
 
-const $ = (id) => document.getElementById(id);
+<main class="card">
+<h1>BlitzRun</h1>
 
-// IDs المستخدمة في HTML:
-// coins, airdrop, todayCount
-// btn-run, btn-jump, btn-sync
-// walletInput, btn-save-wallet
-// refLink, btn-copy
+<section class="grid">
+<div class="box">
+<h3>Coins</h3>
+<div id="coins">0</div>
+</div>
+<div class="box">
+<h3>Airdrop (est.)</h3>
+<div id="airdrop">0</div>
+</div>
+</section>
 
-// إعدادات عامة
-const DAILY_CAP = 5000;
-let coins = parseInt(localStorage.getItem('br_coins') || '0', 10);
-let today = parseInt(localStorage.getItem('br_today') || '0', 10);
-let userId = localStorage.getItem('br_uid') || crypto.randomUUID();
-localStorage.setItem('br_uid', userId);
+<section class="box">
+<h3>Today</h3>
+<div id="todayCount">0 / 5000</div>
+<div class="row">
+<button id="btn-run">Run +10</button>
+<button id="btn-jump">Jump +25</button>
+<button id="btn-sync">Sync to DB</button>
+</div>
+</section>
 
-// تقدير الأيردروب: كل 1000 = 20
-function estAirdrop(c) { return Math.floor(c / 1000) * 20; }
+<section class="box">
+<h3>Wallet</h3>
+<div class="row">
+<input id="walletInput" placeholder="Paste your Phantom address" />
+<button id="btn-save-wallet">Save</button>
+</div>
+</section>
 
-function render() {
-if ($('coins')) $('coins').textContent = coins;
-if ($('airdrop')) $('airdrop').textContent = estAirdrop(coins);
-if ($('todayCount')) $('todayCount').textContent = `${today}/${DAILY_CAP}`;
-if ($('refLink')) $('refLink').value = `${location.origin}${location.pathname}?r=${encodeURIComponent(userId)}`;
-}
+<section class="box">
+<h3>Referral</h3>
+<input id="refLink" readonly />
+<button id="btn-copy">Copy</button>
+</section>
 
-function add(amount) {
-const canAdd = Math.min(amount, Math.max(0, DAILY_CAP - today));
-if (canAdd <= 0) { alert('Daily cap reached'); return; }
-today += canAdd;
-coins += canAdd;
-localStorage.setItem('br_coins', String(coins));
-localStorage.setItem('br_today', String(today));
-render();
-}
+<div class="row">
+<a class="btn" href="#" target="_blank">X</a>
+<a class="btn" href="#" target="_blank">Telegram</a>
+<a class="btn" href="#" target="_blank">Notion</a>
+<a class="btn" href="#" target="_blank">Presale</a>
+</div>
+</main>
 
-// حفظ المحفظة محلياً (MVP)
-function saveWallet() {
-const v = ($('walletInput')?.value || '').trim();
-if (!v) return alert('Enter your Phantom address');
-localStorage.setItem('br_wallet', v);
-alert('Wallet saved (local)');
-}
-
-// نسخ رابط الإحالة
-function copyRef() {
-if (!$('refLink')) return;
-$('refLink').select?.();
-navigator.clipboard.writeText($('refLink').value);
-alert('Copied!');
-}
-
-// --- ربط الأزرار بعد بناء الـDOM ---
-document.addEventListener('DOMContentLoaded', () => {
-$('btn-run')?.addEventListener('click', () => add(10));
-$('btn-jump')?.addEventListener('click', () => add(25));
-$('btn-sync')?.addEventListener('click', () => alert('Sync (test). شغالين أولاً محلياً — نفعل Supabase بعد ما تتأكد الأزرار تعمل.'));
-$('btn-save-wallet')?.addEventListener('click', saveWallet);
-$('btn-copy')?.addEventListener('click', copyRef);
-render();
-});
+<!-- مهم: استدعاء الجافاسكربت -->
+<script defer src="app.js"></script>
+</body>
+</html>
