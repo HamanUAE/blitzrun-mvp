@@ -1,60 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>BlitzRun MVP</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-<main class="card">
+<div class="container">
 <h1>BlitzRun</h1>
 
-<section class="grid">
-<div class="box">
-<h3>Coins</h3>
-<div id="coins">0</div>
+<!-- KPIs -->
+<div class="kpis">
+<div class="kpi">
+<div class="label">Coins</div>
+<div class="value" id="coins">0</div>
 </div>
-<div class="box">
-<h3>Airdrop (est.)</h3>
-<div id="airdrop">0</div>
+<div class="kpi">
+<div class="label">Airdrop (est.)</div>
+<div class="value" id="airdrop">0</div>
 </div>
-</section>
-
-<section class="box">
-<h3>Today</h3>
-<div id="todayCount">0 / 5000</div>
-<div class="row">
-<button id="btn-run">Run +10</button>
-<button id="btn-jump">Jump +25</button>
-<button id="btn-sync">Sync to DB</button>
 </div>
-</section>
 
-<section class="box">
-<h3>Wallet</h3>
-<div class="row">
-<input id="walletInput" placeholder="Paste your Phantom address" />
-<button id="btn-save-wallet">Save</button>
+<!-- Today progress -->
+<div class="card">
+<h2>Today</h2>
+<div id="todayCount">0/5000</div>
+<div class="progress" style="margin:10px 0">
+<div id="todayProgress"></div>
 </div>
-</section>
-
-<section class="box">
-<h3>Referral</h3>
-<input id="refLink" readonly />
-<button id="btn-copy">Copy</button>
-</section>
-
-<div class="row">
-<a class="btn" href="#" target="_blank">X</a>
-<a class="btn" href="#" target="_blank">Telegram</a>
-<a class="btn" href="#" target="_blank">Notion</a>
-<a class="btn" href="#" target="_blank">Presale</a>
+<div class="actions">
+<button id="btn-run" class="btn">Run +10</button>
+<button id="btn-jump" class="btn">Jump +25</button>
+<button id="btn-sync" class="btn">Sync to DB</button>
 </div>
-</main>
+</div>
 
-<!-- مهم: استدعاء الجافاسكربت -->
+<!-- Wallet -->
+<div class="card">
+<h2>Wallet</h2>
+<div class="wallet-row">
+<input id="walletInput" type="text" placeholder="Paste your Phantom address" />
+<button id="btn-save-wallet" class="btn">Save</button>
+</div>
+</div>
+
+<!-- Referral -->
+<div class="card">
+<h2>Referral</h2>
+<div class="ref-row">
+<input id="refLink" type="text" readonly />
+<button id="btn-copy" class="btn">Copy</button>
+</div>
+<div class="links" style="margin-top:10px">
+<a href="#" id="link-x">X</a>
+<a href="#" id="link-telegram">Telegram</a>
+<a href="#" id="link-notion">Notion</a>
+<a href="#" id="link-presale">Presale</a>
+</div>
+</div>
+</div>
+
+<!-- JavaScript -->
 <script defer src="app.js"></script>
 </body>
 </html>
