@@ -102,3 +102,5 @@ $('btn-sync')?.addEventListener('click', syncToDB);
 $('btn-save-wallet')?.addEventListener('click', saveWallet);
 $('btn-copy')?.addEventListener('click', copyRef);
 });
+window.addCoins = add;
+
