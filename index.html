@@ -1,60 +1,62 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BlitzRun MVP</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="app.js"></script>
-</head>
-<body>
-  <div class="wrap">
-    <header class="hero">
-      <h1>BlitzRun <span class="badge">MVP</span></h1>
-      <p class="tag">Run • Collect • Get Airdrops</p>
-    </header>
+console.log('BlitzRun app.js loaded');
 
-    <section class="panel">
-      <div class="stats">
-        <div class="stat"><label>Coins</label><span id="coins">0</span></div>
-        <div class="stat"><label>Airdrop (est.)</label><span id="airdrop">0</span></div>
-        <div class="stat"><label>Today</label><span id="today">0 / 5000</span></div>
-      </div>
-      <div class="actions">
-        <button id="btnRun">Run +10</button>
-        <button id="btnJump">Jump +25</button>
-        <button id="btnSync" class="primary">Sync to DB</button>
-      </div>
-    </section>
+const $ = (id) => document.getElementById(id);
 
-    <section class="panel">
-      <h2>Wallet</h2>
-      <div class="row">
-        <input id="wallet" placeholder="Paste your Phantom address" />
-        <button id="btnSaveWallet">Save</button>
-      </div>
-    </section>
+// IDs المستخدمة في HTML:
+// coins, airdrop, todayCount
+// btn-run, btn-jump, btn-sync
+// walletInput, btn-save-wallet
+// refLink, btn-copy
 
-    <section class="panel">
-      <h2>Referral</h2>
-      <p>Share this link (first visit only) = bonus later:</p>
-      <div class="row">
-        <input id="refLink" readonly />
-        <button id="btnCopy">Copy</button>
-      </div>
-    </section>
+// إعدادات عامة
+const DAILY_CAP = 5000;
+let coins = parseInt(localStorage.getItem('br_coins') || '0', 10);
+let today = parseInt(localStorage.getItem('br_today') || '0', 10);
+let userId = localStorage.getItem('br_uid') || crypto.randomUUID();
+localStorage.setItem('br_uid', userId);
 
-    <section class="panel links">
-      <a href="https://x.com/lazyapereboot?s=21" target="_blank">X</a>
-      <a href="https://t.me/lazyaperreboot" target="_blank">Telegram</a>
-      <a href="https://www.notion.so/LazyApe-Reboot-Official-Project-Page-247c600c319c80c4a18bf4460cea5f23?source=copy_link" target="_blank">Notion</a>
-      <a href="https://docs.google.com/forms/d/1PbTHXkMTFTQSzOj4ch9owbMOVbqd_bvXfD5GeNeuwFI/viewform?edit_requested=true" target="_blank">Presale</a>
-    </section>
+// تقدير الأيردروب: كل 1000 = 20
+function estAirdrop(c) { return Math.floor(c / 1000) * 20; }
 
-    <footer class="foot">
-      <small>Connected to Supabase project: <code>https://jijtryjvptrkbearkhsl.supabase.co</code></small>
-    </footer>
-  </div>
-</body>
-</html>
+function render() {
+if ($('coins')) $('coins').textContent = coins;
+if ($('airdrop')) $('airdrop').textContent = estAirdrop(coins);
+if ($('todayCount')) $('todayCount').textContent = `${today}/${DAILY_CAP}`;
+if ($('refLink')) $('refLink').value = `${location.origin}${location.pathname}?r=${encodeURIComponent(userId)}`;
+}
+
+function add(amount) {
+const canAdd = Math.min(amount, Math.max(0, DAILY_CAP - today));
+if (canAdd <= 0) { alert('Daily cap reached'); return; }
+today += canAdd;
+coins += canAdd;
+localStorage.setItem('br_coins', String(coins));
+localStorage.setItem('br_today', String(today));
+render();
+}
+
+// حفظ المحفظة محلياً (MVP)
+function saveWallet() {
+const v = ($('walletInput')?.value || '').trim();
+if (!v) return alert('Enter your Phantom address');
+localStorage.setItem('br_wallet', v);
+alert('Wallet saved (local)');
+}
+
+// نسخ رابط الإحالة
+function copyRef() {
+if (!$('refLink')) return;
+$('refLink').select?.();
+navigator.clipboard.writeText($('refLink').value);
+alert('Copied!');
+}
+
+// --- ربط الأزرار بعد بناء الـDOM ---
+document.addEventListener('DOMContentLoaded', () => {
+$('btn-run')?.addEventListener('click', () => add(10));
+$('btn-jump')?.addEventListener('click', () => add(25));
+$('btn-sync')?.addEventListener('click', () => alert('Sync (test). شغالين أولاً محلياً — نفعل Supabase بعد ما تتأكد الأزرار تعمل.'));
+$('btn-save-wallet')?.addEventListener('click', saveWallet);
+$('btn-copy')?.addEventListener('click', copyRef);
+render();
+});
