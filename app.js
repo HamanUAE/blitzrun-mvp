@@ -1,10 +1,40 @@
-const MANIFEST_URL = 'assets/manifest.json';
-let ASSETS = null;
-async function loadManifest() {
-const res = await fetch(MANIFEST_URL, { cache: 'no-store' });
-ASSETS = await res.json();
-console.log('manifest loaded:', ASSETS); // للتأكد
+/* =========================
+BlitzRun MVP - app.js (full)
+Requires:
+- assets/manifest.json (بالأسماء التي وضعناها)
+- index.html فيه <canvas id="game"></canvas>
+========================= */
+
+const MANIFEST_URL = "assets/manifest.json";
+
+const CANVAS = document.getElementById("game");
+const CTX = CANVAS.getContext("2d");
+
+// مقاس افتراضي مرن
+function resize() {
+const w = window.innerWidth;
+const h = window.innerHeight;
+const ratio = 16/9;
+if (w/h > ratio) {
+CANVAS.height = h;
+CANVAS.width = Math.floor(h*ratio);
+} else {
+CANVAS.width = w;
+CANVAS.height = Math.floor(w/ratio);
 }
+}
+resize(); window.addEventListener("resize", resize);
+
+// -------- تحميل الملف التعريفي + الصور --------
+let ASSETS = null; // محتوى manifest (المسارات)
+let IMAGES = {}; // الصور المحمّلة الفعلية
+
+async function loadManifest() {
+const res = await fetch(MANIFEST_URL, { cache: "no-store" });
+if (!res.ok) throw new Error("Cannot load manifest.json");
+ASSETS = await res.json();
+}
+
 function loadImage(path) {
 return new Promise((resolve, reject) => {
 const img = new Image();
@@ -13,420 +43,420 @@ img.onerror = reject;
 img.src = path;
 });
 }
-async function preloadAssets() {
-await loadManifest();
 
-// أمثلة: خلفيات
-const bgForest = await loadImage(ASSETS.backgrounds.bg_forest_path);
-const bgCity = await loadImage(ASSETS.backgrounds.bg_city_street);
-const bgBeach = await loadImage(ASSETS.backgrounds.bg_beach_sunny);
-
-// اللاعب (ركض/قفز/انزلاق)
-const run1 = await loadImage(ASSETS.monkey.monkey_run_1);
-const run2 = await loadImage(ASSETS.monkey.monkey_run_2);
-const run3 = await loadImage(ASSETS.monkey.monkey_run_3);
-const jump = await loadImage(ASSETS.monkey.monkey_jump_up);
-const slide= await loadImage(ASSETS.monkey.monkey_slide);
-
-// عقبات المدينة/الشاطئ/الكهف (أمثلة)
-const cone = await loadImage(ASSETS.obstacles.obstacle_cone);
-const bench = await loadImage(ASSETS.obstacles.obstacle_bench);
-const ball = await loadImage(ASSETS.obstacles.obstacle_ball);
-const crystal= await loadImage(ASSETS.obstacles.obstacle_crystal);
-
-// UI
-const uiPaused = await loadImage(ASSETS.ui.ui_paused);
-const uiScore = await loadImage(ASSETS.ui.ui_scoreboard);
-
-// خزّن اللي تحتاجه في كائن global أو state اللعبة
-window.GFX = { bgForest, bgCity, bgBeach, run1, run2, run3, jump, slide, cone, bench, ball, crystal, uiPaused, uiScore };
-}
-preloadAssets().then(startGame).catch(console.error);
-async function preloadAssets() {
-await loadManifest();
-
-// خلفيات
-const bgForest = await loadImage(ASSETS.backgrounds.bg_forest_path);
-const bgCity = await loadImage(ASSETS.backgrounds.bg_city_street);
-const bgBeach = await loadImage(ASSETS.backgrounds.bg_beach_sunny);
-
-// اللاعب
-const run1 = await loadImage(ASSETS.monkey.monkey_run_1);
-const run2 = await loadImage(ASSETS.monkey.monkey_run_2);
-const run3 = await loadImage(ASSETS.monkey.monkey_run_3);
-const jump = await loadImage(ASSETS.monkey.monkey_jump_up);
-const slide = await loadImage(ASSETS.monkey.monkey_slide);
-
-// UI (أمثلة)
-const uiPaused = await loadImage(ASSETS.ui.ui_paused);
-const uiScore = await loadImage(ASSETS.ui.ui_scoreboard);
-
-// خزّنها لاستخدامها لاحقًا
-window.GFX = {
-bgForest, bgCity, bgBeach,
-run1, run2, run3, jump, slide,
-uiPaused, uiScore
-};
-}
-function startGame() {
-// هنا تستخدم window.GFX في الرسم/التحديث…
-console.log('game start, assets ready:', window.GFX);
-}
-
-preloadAssets()
-.then(startGame)
-.catch(err => {
-console.error('Asset preload failed:', err);
-alert('Failed to load assets. Check console.');
-});
-// -------- Asset manifest loader --------
-const MANIFEST_URL = "assets/manifest.json";
-let PATHS = null; // raw paths from manifest
-let IMAGES = null; // HTMLImageElements mirroring manifest structure
-
-async function loadManifest() {
-const res = await fetch(MANIFEST_URL, { cache: "no-store" });
-PATHS = await res.json();
-}
-
-// Walk nested object and replace each path with loaded Image()
-async function loadImagesFromManifest() {
-function walk(obj, baseKey = "") {
-const out = Array.isArray(obj) ? [] : {};
-for (const k in obj) {
-const v = obj[k];
-if (typeof v === "string") {
-out[k] = loadImage(v);
-} else {
-out[k] = walk(v, baseKey ? `${baseKey}.${k}` : k);
+// يحوّل شجرة المسارات إلى شجرة صور محمّلة
+async function loadImagesFromMap(map, baseKey = "") {
+const out = {};
+for (const [key, val] of Object.entries(map)) {
+const k = key;
+if (typeof val === "string") {
+out[k] = await loadImage(val);
+} else if (val && typeof val === "object") {
+out[k] = await loadImagesFromMap(val, baseKey + k + ".");
 }
 }
 return out;
 }
-function loadImage(src) {
-return new Promise((resolve, reject) => {
-const img = new Image();
-img.onload = () => resolve(img);
-img.onerror = reject;
-img.src = src;
-});
-}
-const tree = walk(PATHS);
-// await all leaves:
-async function resolveLeaves(node) {
-if (node instanceof Promise) return await node;
-if (typeof node !== "object") return node;
-const out = Array.isArray(node) ? [] : {};
-for (const k in node) out[k] = await resolveLeaves(node[k]);
-return out;
-}
-IMAGES = await resolveLeaves(tree);
+
+async function preloadAll() {
+await loadManifest();
+IMAGES = await loadImagesFromMap(ASSETS);
+console.log("Assets ready:", IMAGES);
 }
 
-// Helpers to access images safely
-const A = {
-bg: (key) => IMAGES.backgrounds[key],
-mk: (key) => IMAGES.monkey[key],
-ui: (key) => IMAGES.ui[key],
-ic: (key) => IMAGES.icons[key],
-col: (key) => IMAGES.collectable[key],
-obs: (key) => IMAGES.obstacles[key], // انتبه: اسم المجلد obstacles
-};
-
-// -------- Canvas / world setup --------
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-function resize() {
-canvas.width = Math.floor(window.innerWidth * devicePixelRatio);
-canvas.height = Math.floor(window.innerHeight * devicePixelRatio);
-ctx.setTransform(1,0,0,1,0,0);
-ctx.scale(devicePixelRatio, devicePixelRatio);
-}
-resize();
-window.addEventListener("resize", resize);
-
-// -------- Game state --------
+// ---------- Game State ----------
 const state = {
 running: true,
-gameOver: false,
+paused: false,
+track: 0, // 0: forest, 1: city, 2: beach
 score: 0,
 coins: 0,
-speed: 6,
+time: 0,
+speed: 6, // سرعة التمرير
 gravity: 0.9,
-groundY: () => canvas.height / devicePixelRatio - 120,
+groundY: 0, // يحدد بعد معرفة المقاس
+bgScroll: [0,0,0], // parallax layers offsets
+obstacles: [],
+pickups: [],
 };
 
-// Background layers (parallax)
-const BG_KEYS = ["bg_forest_path","bg_city_street","bg_beach_sunny"];
-let bgIndex = 0;
-let bgX = 0;
-
-function drawBackground(dt) {
-const img = A.bg(BG_KEYS[bgIndex]);
-if (!img) return;
-const viewW = canvas.width / devicePixelRatio;
-const viewH = canvas.height / devicePixelRatio;
-
-// cover screen
-const s = Math.max(viewW / img.width, viewH / img.height);
-const w = img.width * s, h = img.height * s;
-
-bgX -= state.speed * 0.5;
-if (bgX <= -w) bgX += w;
-
-// tile twice for seamless scroll
-ctx.drawImage(img, bgX, 0, w, h);
-ctx.drawImage(img, bgX + w, 0, w, h);
-}
-
-// -------- Player (monkey) --------
+// ---------- Player ----------
 const player = {
-x: 120,
+x: 0,
 y: 0,
-vy: 0,
 w: 120,
 h: 150,
+vy: 0,
 onGround: true,
-action: "run", // run | jump | slide | attack
+dir: 1,
+state: "run", // run / jump / slide / attack / idle
 frame: 0,
 frameTime: 0,
+frameDur: 90, // ms لكل فريم
 };
 
-function setAction(a) {
-if (player.action === a) return;
-player.action = a;
-player.frame = 0;
-player.frameTime = 0;
+// إعدادات بعد تحميل الصور
+function setupAfterAssets() {
+player.x = Math.floor(CANVAS.width * 0.18);
+state.groundY = Math.floor(CANVAS.height * 0.78);
+player.y = state.groundY - player.h;
+
+// تعليمات أعلى اليمين
+showTip("Press 1/2/3 to switch tracks • Space=Jump • S=Slide • K=Attack • P=Pause");
 }
 
-function getRunFrames() { return [A.mk("monkey_run_1"), A.mk("monkey_run_2"), A.mk("monkey_run_3")]; }
-function getJumpImg() { return A.mk("monkey_jump_up"); }
-function getSlideImg(){ return A.mk("monkey_slide"); }
-function getAttackImg(){ return A.mk("monkey_attack_mask"); }
-function getIdleHappy(){ return A.mk("monkey_idle_happy"); }
+let tipTimer = 0;
+function showTip(msg, ms=3000) {
+tip = msg; tipTimer = Date.now() + ms;
+}
+let tip = "";
 
-function updatePlayer(dt) {
-const ground = state.groundY();
+// ---------- Helpers ----------
+function now() { return performance.now(); }
 
-// gravity
+function rectsOverlap(ax,ay,aw,ah, bx,by,bw,bh) {
+return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+}
+
+function pick(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+// ---------- Input ----------
+const keys = {};
+window.addEventListener("keydown", (e)=>{
+keys[e.key.toLowerCase()] = true;
+
+if (e.key === " " || e.code === "Space") {
+e.preventDefault();
+if (player.onGround && !state.paused) {
+player.vy = -17;
+player.onGround = false;
+player.state = "jump";
+}
+}
+if (e.key.toLowerCase() === "s") {
+if (player.onGround && !state.paused) {
+player.state = "slide";
+player.h = 110;
+player.y = state.groundY - player.h;
+setTimeout(()=> {
+if (player.state === "slide") {
+player.state = "run";
+player.h = 150;
+player.y = state.groundY - player.h;
+}
+}, 450);
+}
+}
+if (e.key.toLowerCase() === "k") {
+if (!state.paused) {
+player.state = "attack";
+setTimeout(()=> { if (player.onGround) player.state = "run"; }, 250);
+}
+}
+if (e.key.toLowerCase() === "p") {
+state.paused = !state.paused;
+}
+if (e.key === "1") state.track = 0;
+if (e.key === "2") state.track = 1;
+if (e.key === "3") state.track = 2;
+});
+window.addEventListener("keyup", (e)=> keys[e.key.toLowerCase()] = false);
+
+// ---------- Content Pools ----------
+function available(keysObj) {
+// يرجّع فقط المفاتيح الموجودة فعلاً ضمن IMAGES
+return Object.keys(keysObj).filter(k => !!keysObj[k]);
+}
+
+// الخلفيات
+let BG_KEYS = [];
+// القرد
+let RUN_FRAMES = [];
+let JUMP_UP = null, SLIDE = null, ATTACK = null, IDLE = null;
+// العقبات والتجميعات
+let OBST_KEYS = [];
+let PICK_KEYS = [];
+
+function buildPools() {
+BG_KEYS = [
+IMAGES.backgrounds.bg_forest_path || null,
+IMAGES.backgrounds.bg_city_street || null,
+IMAGES.backgrounds.bg_beach_sunny || null,
+].filter(Boolean);
+
+RUN_FRAMES = [
+IMAGES.monkey?.monkey_run_1,
+IMAGES.monkey?.monkey_run_2,
+IMAGES.monkey?.monkey_run_3,
+].filter(Boolean);
+
+JUMP_UP = IMAGES.monkey?.monkey_jump_up || RUN_FRAMES[0];
+SLIDE = IMAGES.monkey?.monkey_slide || RUN_FRAMES[0];
+ATTACK = IMAGES.monkey?.monkey_jump_attack || RUN_FRAMES[0];
+IDLE = IMAGES.monkey?.monkey_idle_happy || RUN_FRAMES[0];
+
+// مفاتيح العقبات من manifest (تجاهُل أي صورة ناقصة)
+const obs = IMAGES.obstacles || {};
+const wantedObstacles = [
+"obstacle_cone","obstacle_barrier","obstacle_boat","obstacle_bush",
+"obstacle_puddle","obstacle_water","obstacle_car","obstacle_tree",
+"obstacle_crystal","obstacle_hole","obstacle_box","obstacle_ball",
+"obstacle_beach_chair","obstacle_bush_small","obstacle_bench",
+"obstacle_sandcastle","obstacle_sign"
+];
+OBST_KEYS = wantedObstacles.filter(k => !!obs[k]).map(k => ({key:k, img:obs[k]}));
+
+const col = IMAGES.collectable || {};
+const wantedPickups = ["collect_banana","collect_coins","collect_jetpack","collect_rollerskates","collect_skateboard"];
+PICK_KEYS = wantedPickups.filter(k => !!col[k]).map(k => ({key:k, img:col[k]}));
+}
+
+// ---------- Spawners ----------
+let lastSpawn = 0;
+let lastPickSpawn = 0;
+
+function maybeSpawn(dt) {
+lastSpawn += dt;
+lastPickSpawn += dt;
+
+const laneY = state.groundY;
+
+// عقبات كل 0.9 - 1.4 ثانية
+if (lastSpawn > 900 + Math.random()*500 && OBST_KEYS.length) {
+lastSpawn = 0;
+const o = pick(OBST_KEYS);
+const scale = 0.7 + Math.random()*0.5;
+const w = Math.floor(o.img.width*scale);
+const h = Math.floor(o.img.height*scale);
+state.obstacles.push({
+img:o.img,
+x: CANVAS.width + 30,
+y: laneY - h,
+w, h,
+vx: state.speed + 2
+});
+}
+
+// تجميعات كل 1.3 - 2.2 ثانية
+if (lastPickSpawn > 1300 + Math.random()*900 && PICK_KEYS.length) {
+lastPickSpawn = 0;
+const p = pick(PICK_KEYS);
+const floatY = laneY - 110 - Math.random()*90;
+const s = 0.6 + Math.random()*0.4;
+const w = Math.floor(p.img.width*s);
+const h = Math.floor(p.img.height*s);
+state.pickups.push({
+key:p.key,
+img:p.img,
+x: CANVAS.width + 20,
+y: floatY,
+w,h,
+vx: state.speed + 2.5
+});
+}
+}
+
+// ---------- Update ----------
+let last = now();
+
+function update() {
+const t = now();
+const dt = t - last;
+last = t;
+if (state.paused) return;
+
+state.time += dt;
+
+// تمرير الخلفية
+const sp = state.speed;
+state.bgScroll[state.track] = (state.bgScroll[state.track] + sp*0.5) % CANVAS.width;
+
+// فيزياء اللاعب
+if (!player.onGround) {
 player.vy += state.gravity;
 player.y += player.vy;
-if (player.y > ground - player.h) {
-player.y = ground - player.h;
+if (player.y >= state.groundY - player.h) {
+player.y = state.groundY - player.h;
 player.vy = 0;
 player.onGround = true;
-if (player.action === "jump") setAction("run");
+player.state = "run";
+}
 }
 
-// animation frame step
+// فريمات الحركة
 player.frameTime += dt;
-if (player.action === "run") {
-const runFrames = getRunFrames();
-if (player.frameTime > 100) { // ms
-player.frame = (player.frame + 1) % runFrames.length;
+if (player.frameTime >= player.frameDur) {
 player.frameTime = 0;
+player.frame = (player.frame + 1) % Math.max(1, RUN_FRAMES.length);
+}
+
+// توليد
+maybeSpawn(dt);
+
+// تحريك العقبات/التجميعات + تصادم
+for (let i=state.obstacles.length-1;i>=0;i--) {
+const o = state.obstacles[i];
+o.x -= o.vx;
+if (o.x + o.w < 0) state.obstacles.splice(i,1);
+else if (rectsOverlap(player.x+15, player.y+10, player.w-30, player.h-20, o.x, o.y, o.w, o.h)) {
+// لو اللاعب يهاجم، نحذف العقبة ونكسب نقاط
+if (player.state === "attack") {
+state.score += 5;
+state.obstacles.splice(i,1);
+showTip("+5 (destroyed)");
+} else {
+gameOver();
+return;
 }
 }
+}
+
+for (let i=state.pickups.length-1;i>=0;i--) {
+const p = state.pickups[i];
+p.x -= p.vx;
+if (p.x + p.w < 0) state.pickups.splice(i,1);
+else if (rectsOverlap(player.x+10, player.y+10, player.w-20, player.h-20, p.x, p.y, p.w, p.h)) {
+state.pickups.splice(i,1);
+if (p.key === "collect_coins") { state.coins += 5; state.score += 5; showTip("+5 coins"); }
+else if (p.key === "collect_banana") { state.coins += 1; state.score += 1; }
+else { state.score += 3; showTip("+3"); }
+}
+}
+
+// نقاط تتزايد مع الوقت
+state.score += dt * 0.005; // ~ +1 كل 200ms
+}
+
+// ---------- Draw ----------
+function drawBackground() {
+// خلفية موحدة خضراء كطبقة أساس (في حال صورة ناقصة)
+CTX.fillStyle = "#245b2a";
+CTX.fillRect(0,0,CANVAS.width,CANVAS.height);
+
+const bg = BG_KEYS[state.track];
+if (!bg) return;
+
+const y = 0;
+const h = CANVAS.height;
+const w = Math.floor(bg.width * (h / bg.height));
+
+// بلاطات متكررة أفقياً
+const offset = Math.floor(state.bgScroll[state.track]) % w;
+for (let x = -offset; x < CANVAS.width; x += w) {
+CTX.drawImage(bg, x, y, w, h);
+}
+
+// خط الأرض
+CTX.fillStyle = "rgba(0,0,0,0.2)";
+CTX.fillRect(0, state.groundY+2, CANVAS.width, 4);
 }
 
 function drawPlayer() {
 let img;
-if (player.action === "run") img = getRunFrames()[player.frame];
-else if (player.action === "jump") img = getJumpImg();
-else if (player.action === "slide") img = getSlideImg();
-else if (player.action === "attack") img = getAttackImg();
-else img = getIdleHappy();
+if (player.state === "run") img = RUN_FRAMES[player.frame] || IDLE;
+else if (player.state === "jump") img = JUMP_UP;
+else if (player.state === "slide") img = SLIDE;
+else if (player.state === "attack") img = ATTACK;
+else img = IDLE;
 
-if (!img) return;
-ctx.drawImage(img, player.x, player.y, player.w, player.h);
+const scale = player.h / img.height;
+const w = Math.floor(img.width * scale);
+const x = player.x;
+const y = player.y;
+CTX.drawImage(img, x, y, w, player.h);
+player.w = w; // حدّث العرض الحقيقي
 }
 
-// -------- Obstacles & Collectables --------
-const obstacles = [];
-const pickups = [];
-
-const OBSTACLE_KEYS = [
-"obstacle_cone", "obstacle_box", "obstacle_bench",
-"obstacle_tree", "obstacle_car", "obstacle_bush",
-"obstacle_crystal", "obstacle_hole",
-"obstacle_beach_ball", "obstacle_beach_chair"
-].filter(k => PATHS?.obstacles?.[k]); // يحذف المفاتيح غير الموجودة لو تغيّر manifest
-
-const PICKUP_KEYS = ["collect_coins","collect_banana","collect_rollerskates","collect_skateboard","collect_jetpack"]
-.filter(k => PATHS?.collectable?.[k]);
-
-function spawnObstacle() {
-if (OBSTACLE_KEYS.length === 0) return;
-const key = OBSTACLE_KEYS[Math.floor(Math.random()*OBSTACLE_KEYS.length)];
-const img = A.obs(key);
-if (!img) return;
-const scale = 0.6 + Math.random()*0.5;
-const w = img.width*scale, h = img.height*scale;
-obstacles.push({
-key, img,
-x: canvas.width/devicePixelRatio + 40,
-y: state.groundY() - h + (key.includes("hole") ? 30 : 0),
-w, h, passed:false
-});
+function drawObjects() {
+// عقبات
+for (const o of state.obstacles) {
+CTX.drawImage(o.img, o.x, o.y, o.w, o.h);
 }
-function spawnPickup() {
-if (PICKUP_KEYS.length === 0) return;
-const key = PICKUP_KEYS[Math.floor(Math.random()*PICKUP_KEYS.length)];
-const img = A.col(key);
-if (!img) return;
-const scale = 0.9;
-const w = img.width*scale, h = img.height*scale;
-const baseY = state.groundY() - h - (Math.random()<0.5 ? 80 : 0);
-pickups.push({ key, img, x: canvas.width/devicePixelRatio + 40, y: baseY, w, h });
-}
-
-let spawnTimerObs = 0;
-let spawnTimerPick = 0;
-
-function updateEntities(dt) {
-const dx = state.speed;
-
-// spawn
-spawnTimerObs -= dt;
-spawnTimerPick -= dt;
-if (spawnTimerObs <= 0) { spawnObstacle(); spawnTimerObs = 1200 + Math.random()*800; }
-if (spawnTimerPick <= 0) { spawnPickup(); spawnTimerPick = 900 + Math.random()*900; }
-
-// move & cull
-for (const o of obstacles) o.x -= dx;
-for (const p of pickups) p.x -= dx;
-while (obstacles.length && obstacles[0].x + obstacles[0].w < -100) obstacles.shift();
-while (pickups.length && pickups[0].x + pickups[0].w < -100) pickups.shift();
-
-// scoring when passed
-for (const o of obstacles) {
-if (!o.passed && o.x + o.w < player.x) { state.score += 5; o.passed = true; }
-}
-
-// collisions
-const pr = {x:player.x+20, y:player.y+15, w:player.w-40, h:player.h-25};
-
-// pick coins
-for (let i=pickups.length-1; i>=0; i--){
-const it = pickups[i];
-if (rectsOverlap(pr, it)) {
-state.coins += 1;
-state.score += 10;
-pickups.splice(i,1);
+// تجميعات
+for (const p of state.pickups) {
+CTX.drawImage(p.img, p.x, p.y, p.w, p.h);
 }
 }
-// hit obstacle
-for (const o of obstacles) {
-if (rectsOverlap(pr, o)) {
-// إذا اللاعب يهاجم (القناع) نعطيه “سحق” بسيط
-if (player.action === "attack" && o.key !== "obstacle_hole") {
-o.x -= 12; // knock
-continue;
+
+function drawUI() {
+CTX.font = Math.floor(CANVAS.height*0.035) + "px Arial";
+CTX.fillStyle = "#ffd04d";
+CTX.textAlign = "left";
+CTX.fillText("Score: " + Math.floor(state.score), 14, 34);
+CTX.fillText("Coins: " + Math.floor(state.coins), 14, 70);
+
+// نص التعليمات (يختفي بعد زمن)
+if (Date.now() < tipTimer) {
+CTX.textAlign = "right";
+CTX.fillText(tip, CANVAS.width-14, 34);
 }
-gameOver();
-break;
+
+// شاشة الإيقاف المؤقت
+if (state.paused) {
+CTX.fillStyle = "rgba(0,0,0,0.35)";
+CTX.fillRect(0,0,CANVAS.width,CANVAS.height);
+const pausedImg = IMAGES.ui?.ui_paused || null;
+if (pausedImg) {
+const w = Math.min(pausedImg.width, CANVAS.width*0.6);
+const h = pausedImg.height * (w/pausedImg.width);
+CTX.drawImage(pausedImg, (CANVAS.width-w)/2, (CANVAS.height-h)/2, w, h);
+} else {
+CTX.fillStyle = "#fff";
+CTX.textAlign = "center";
+CTX.font = Math.floor(CANVAS.height*0.07) + "px Arial";
+CTX.fillText("PAUSED", CANVAS.width/2, CANVAS.height/2);
 }
 }
 }
 
-function drawEntities() {
-for (const o of obstacles) ctx.drawImage(o.img, o.x, o.y, o.w, o.h);
-for (const p of pickups) ctx.drawImage(p.img, p.x, p.y, p.w, p.h);
-}
-
-function rectsOverlap(a,b){
-return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-}
-
-// -------- Input --------
-window.addEventListener("keydown", (e) => {
-if (e.repeat) return;
-if (e.key === "p" || e.key === "P") togglePause();
-if (!state.running || state.gameOver) return;
-
-if ((e.code === "Space" || e.key === " ") && player.onGround) {
-player.vy = -18;
-player.onGround = false;
-setAction("jump");
-} else if (e.key === "s" || e.key === "S") {
-setAction("slide");
-setTimeout(()=> setAction("run"), 400);
-} else if (e.key === "k" || e.key === "K") {
-setAction("attack");
-setTimeout(()=> setAction("run"), 350);
-}
-});
-
-// -------- Pause / GameOver overlays --------
-const $score = document.getElementById("score");
-const $coins = document.getElementById("coins");
-const $overlay = document.getElementById("overlay");
-const $overlayImg = document.getElementById("overlay-img");
-const $restart = document.getElementById("btn-restart");
-$restart.addEventListener("click", resetGame);
-
-function togglePause(){
-if (state.gameOver) return;
-state.running = !state.running;
-$overlay.classList.toggle("hidden", state.running);
-$restart.classList.add("hidden");
-$overlayImg.src = A.ui("ui_paused")?.src ?? "";
-}
-
-function gameOver(){
-state.gameOver = true;
-state.running = false;
-$overlay.classList.remove("hidden");
-$restart.classList.remove("hidden");
-// حاول نعرض صورة “game over” بالنص
-$overlayImg.src = (A.ui("ui_game_over_monkey") || A.ui("ui_game_over_text") || A.ui("ui_scoreboard"))?.src ?? "";
-}
-
-function resetGame(){
-state.running = true;
-state.gameOver = false;
-state.score = 0; state.coins = 0;
-obstacles.length = 0; pickups.length = 0;
-bgX = 0;
-setAction("run");
-player.x = 120; player.y = state.groundY() - player.h; player.vy = 0; player.onGround = true;
-$overlay.classList.add("hidden");
-}
-
-// -------- Main loop --------
-let last = 0;
-function loop(ts){
-const dt = Math.min(50, ts - last || 16);
-last = ts;
-ctx.clearRect(0,0, canvas.width, canvas.height);
-
-drawBackground(dt);
-if (state.running){
-updatePlayer(dt);
-updateEntities(dt);
-state.score += 0.05 * (dt); // passive score
-}
-drawEntities();
+let loopId = null;
+function loop() {
+if (!state.running) return;
+if (!state.paused) update();
+drawBackground();
+drawObjects();
 drawPlayer();
-
-// HUD
-$score.textContent = Math.floor(state.score);
-$coins.textContent = state.coins;
-
-requestAnimationFrame(loop);
+drawUI();
+loopId = requestAnimationFrame(loop);
 }
 
-// -------- Boot --------
-(async function boot(){
-try{
-await loadManifest();
-await loadImagesFromManifest();
-// ضع اللاعب على الأرض من البداية
-player.y = state.groundY() - player.h;
-// لو عندك شاشة “main menu” في manifest حاب تبدأ بها، ممكن تعرضها هنا
-requestAnimationFrame(loop);
-}catch(err){
-console.error("Failed to boot:", err);
-alert("Failed to load assets. Check manifest paths in assets/manifest.json");
+// ---------- Game Over ----------
+function gameOver() {
+state.running = false;
+// طبقة تعتيم
+CTX.fillStyle = "rgba(0,0,0,0.45)";
+CTX.fillRect(0,0,CANVAS.width,CANVAS.height);
+
+const overImg = IMAGES.ui?.ui_game_over_monkey || IMAGES.ui?.ui_game_over_text || null;
+if (overImg) {
+const w = Math.min(overImg.width, CANVAS.width*0.7);
+const h = overImg.height * (w/overImg.width);
+CTX.drawImage(overImg, (CANVAS.width-w)/2, (CANVAS.height-h)/2, w, h);
+} else {
+CTX.fillStyle = "#fff";
+CTX.textAlign = "center";
+CTX.font = Math.floor(CANVAS.height*0.08) + "px Arial";
+CTX.fillText("GAME OVER", CANVAS.width/2, CANVAS.height/2);
+}
+CTX.textAlign = "center";
+CTX.font = Math.floor(CANVAS.height*0.035) + "px Arial";
+CTX.fillStyle = "#ffd04d";
+CTX.fillText("Refresh the page to try again", CANVAS.width/2, CANVAS.height*0.72);
+}
+
+// ---------- Start ----------
+(async function start(){
+try {
+await preloadAll();
+buildPools();
+setupAfterAssets();
+loop();
+} catch (err) {
+console.error(err);
+CTX.fillStyle = "#300";
+CTX.fillRect(0,0,CANVAS.width,CANVAS.height);
+CTX.fillStyle = "#fff";
+CTX.font = "20px monospace";
+CTX.fillText("Failed to load assets/manifest.json", 20, 40);
 }
 })();
