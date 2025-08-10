@@ -1,127 +1,93 @@
-/* === Reset بسيط === */
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+:root{
+  --bg:#0b1512;
+  --glass:rgba(0,0,0,.35);
+  --white:#f2fff6;
+  --mint:#b9f6ca;
+  --lime:#d9ff6a;
+  --x:#111;
+  --tg:#2aa9e0;
+  --notion:#fff;
+  --ape:#ffcf5a;
+}
 
+*{box-sizing:border-box}
+html,body{height:100%}
 body{
-font-family: system-ui, Arial, Tahoma, sans-serif;
-background:#0c1f17;
-color:#e9fff5;
-margin:0;
-direction:ltr; /* نخلي التخطيط LTR */
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--white);
+  background: var(--bg);
 }
 
-.container{
-max-width:960px;
-margin:24px auto;
-padding:0 16px 32px;
+/* Topbar */
+.topbar{
+  position:fixed; inset:0 0 auto 0; height:64px;
+  display:flex; align-items:center; padding:0 20px;
+  background: linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,0));
+  z-index:10;
+}
+.logo{
+  font-weight:900; letter-spacing:.5px; text-transform:lowercase;
+  background: linear-gradient(90deg, #fff, var(--mint), var(--lime));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  font-size:22px;
 }
 
-/* عناوين */
-h1{ margin:16px 0 24px; font-size:28px; }
-h2{ margin:0 0 12px; font-size:18px; }
-
-/* كروت */
-.card{
-background:#112920;
-border:1px solid #1f3d32;
-border-radius:12px;
-padding:20px;
-margin-bottom:16px;
+/* Hero */
+.hero{
+  min-height:100vh;
+  background: radial-gradient(transparent, rgba(0,0,0,.6)),
+              url('assets/start_bg.png') center/cover no-repeat fixed;
+  display:grid; place-items:center; padding:110px 20px 40px;
+}
+.hero__content{
+  width:100%; max-width:980px;
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  padding:28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
 }
 
-/* شبكة الأرقام العلوية */
-.kpis{
-display:grid;
-grid-template-columns: 1fr 1fr;
-gap:12px;
+.title{
+  margin:0 0 6px; font-size: clamp(28px, 4.2vw, 44px);
+  line-height:1.1;
+  text-shadow:0 2px 0 rgba(0,0,0,.35);
 }
-.kpi{
-background:#0f231c;
-border:1px solid #1f3d32;
-border-radius:10px;
-padding:14px;
-}
-.kpi .label{ opacity:.85; font-size:14px; margin-bottom:4px; }
-.kpi .value{ font-size:20px; font-weight:700; }
-
-/* صف اليوم + الأزرار */
-.actions{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:10px;
+.subtitle{
+  margin:0 0 22px; opacity:.9; font-size:clamp(14px,2.2vw,18px);
 }
 
+/* Buttons grid */
+.cta-grid{
+  display:grid; gap:12px;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+}
+@media (max-width:720px){
+  .cta-grid{ grid-template-columns: 1fr; }
+}
+
+/* Generic button */
 .btn{
-border:1px solid #2b5143;
-background:#153428;
-color:#e9fff5;
-padding:10px 14px;
-border-radius:8px;
-cursor:pointer;
-font-weight:600;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  padding:14px 16px; border-radius:14px; text-decoration:none; color:#001;
+  font-weight:800; cursor:pointer; user-select:none;
+  border:2px solid rgba(0,0,0,.15);
+  box-shadow: 0 8px 0 rgba(0,0,0,.25);
+  transform: translateY(0); transition:.12s ease;
 }
-.btn:hover{ filter:brightness(1.06); }
+.btn:active{ transform: translateY(2px); box-shadow: 0 6px 0 rgba(0,0,0,.25); }
 
-/* حقول الإدخال */
-input[type="text"], input[type="url"]{
-width:100%;
-padding:10px 12px;
-background:#0f2a22;
-color:#e9fff5;
-border:1px solid #1f3d32;
-border-radius:8px;
-outline:none;
-}
-input::placeholder{ color:#a7cfc0; }
+.btn–play{ grid-column: 1 / -1; font-size:18px; background: linear-gradient(90deg, #ffe082, #ffd54f);
+  border-color:#d6a600; color:#2b1a00; }
+.btn–x{ background: linear-gradient(90deg, #151515, #303030); color:#fff; }
+.btn–tg{ background: linear-gradient(90deg, #2ec3ff, #1aa7e8); color:#002233; }
+.btn–notion{ background: linear-gradient(90deg, #fff, #f2f2f2); color:#111; }
+.btn–airdrop{ background: linear-gradient(90deg, #b9f6ca, #d9ff6a); color:#002d16; }
 
-/* صف المحفظة */
-.wallet-row{
-display:flex;
-gap:10px;
-align-items:center;
+/* Footer */
+.footer{
+  text-align:center; padding:16px; opacity:.75; font-size:13px;
 }
-
-/* الإحالة */
-.ref-row{
-display:flex;
-gap:10px;
-align-items:center;
-}
-.ref-row input{
-flex:1;
-}
-
-/* الروابط السفلية */
-.links{
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-}
-.links a{
-color:#9fe7cc;
-text-decoration:none;
-border-bottom:1px dotted #3c6;
-}
-.links a:hover{ text-decoration:underline; }
-
-/* شريط اليوم */
-.progress{
-width:100%;
-height:8px;
-background:#0b1a15;
-border:1px solid #1f3d32;
-border-radius:6px;
-overflow:hidden;
-}
-.progress > div{
-height:100%;
-background:#1dbf85;
-width:0%;
-transition:width .2s ease;
-}
-
-/* للموبايل */
-@media (max-width:600px){
-.kpis{ grid-template-columns:1fr; }
-}
+code{ background: rgba(255,255,255,.08); padding:2px 6px; border-radius:6px; }
