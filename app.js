@@ -1,3 +1,66 @@
+const MANIFEST_URL = './assets/manifest.json'; // مهم: مسار نسبي من index.html
+
+let ASSETS = null;
+const IMAGES = {};
+
+async function loadManifest() {
+try {
+const res = await fetch(MANIFEST_URL, { cache: 'no-store' });
+if (!res.ok) throw new Error(`HTTP ${res.status}`);
+ASSETS = await res.json();
+console.log('✅ manifest loaded:', ASSETS);
+} catch (err) {
+console.error('❌ Failed to load manifest:', err);
+drawError('Failed to load assets/manifest.json');
+throw err;
+}
+}
+
+function loadImage(path) {
+return new Promise((resolve, reject) => {
+const img = new Image();
+img.onload = () => resolve(img);
+img.onerror = (e) => reject(new Error('Image load failed: ' + path));
+img.src = path;
+});
+}
+
+async function preloadAssets() {
+await loadManifest();
+
+// خلفيات
+IMAGES.bg_forest = await loadImage(ASSETS.backgrounds.bg_forest_path);
+IMAGES.bg_city = await loadImage(ASSETS.backgrounds.bg_city_street);
+IMAGES.bg_beach = await loadImage(ASSETS.backgrounds.bg_beach_sunny);
+
+// العدة الأساسية للعدّاء
+IMAGES.run1 = await loadImage(ASSETS.monkey.monkey_run_1);
+IMAGES.run2 = await loadImage(ASSETS.monkey.monkey_run_2);
+IMAGES.run3 = await loadImage(ASSETS.monkey.monkey_run_3);
+}
+
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+function drawError(msg) {
+ctx.fillStyle = '#7b1b1b';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = '#fff';
+ctx.font = '16px monospace';
+ctx.fillText(msg, 20, 40);
+}
+
+(async function start() {
+try {
+await preloadAssets();
+// رسم سريع للتأكد إن الصور وصلت
+ctx.drawImage(IMAGES.bg_forest, 0, 0, canvas.width, canvas.height);
+ctx.drawImage(IMAGES.run1, 40, canvas.height - IMAGES.run1.height - 20);
+console.log('✅ first draw done');
+} catch (e) {
+// drawError ناديناه داخل
+}
+})();
 /* =========================
 BlitzRun MVP - app.js (full)
 Requires:
