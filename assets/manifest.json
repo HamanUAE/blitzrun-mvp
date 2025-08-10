@@ -1,0 +1,76 @@
+{
+"backgrounds": {
+"bg_beach_sunny": "assets/backgrounds/bg_beach_sunny.png",
+"bg_cave_crystals": "assets/backgrounds/bg_cave_crystals.png",
+"bg_city_street": "assets/backgrounds/bg_city_street.png",
+"bg_forest_path": "assets/backgrounds/bg_forest_path.png",
+"bg_ground_tiles": "assets/backgrounds/bg_ground_tiles.png"
+},
+"collectable": {
+"collect_banana": "assets/collectable/collect_banana.png",
+"collect_rollerskates": "assets/collectable/collect_rollerskates.png",
+"collect_skateboard": "assets/collectable/collect_skateboard.png",
+"collect_jetpack": "assets/collectable/collect_jetpack.png",
+"collect_coins": "assets/collectable/collect_coins.png"
+},
+"extra": {
+"extra_countdown": "assets/extra/extra_countdown.png",
+"extra_referral_bonus": "assets/extra/extra_referral_bonus.png",
+"extra_loading": "assets/extra/extra_loading.png",
+"extra_victory": "assets/extra/extra_victory.png",
+"extra_daily_rewards": "assets/extra/extra_daily_rewards.png",
+"extra_alphabet": "assets/extra/extra_alphabet.png"
+},
+"icons": {
+"icon_fireball": "assets/icons/icon_fireball.png",
+"icon_mask": "assets/icons/icon_mask.png",
+"icon_explosion_big": "assets/icons/icon_explosion_big.png",
+"icon_explosion_small": "assets/icons/icon_explosion_small.png",
+"icon_stars": "assets/icons/icon_stars.png"
+},
+"monkey": {
+"monkey_attack_mask1": "assets/monkey/monkey_attack_mask1.png",
+"monkey_idle_happy": "assets/monkey/monkey_idle_happy.png",
+"monkey_jump_attack": "assets/monkey/monkey_jump_attack.png",
+"monkey_run_1": "assets/monkey/monkey_run_1.png",
+"monkey_run_2": "assets/monkey/monkey_run_2.png",
+"monkey_run_3": "assets/monkey/monkey_run_3.png",
+"monkey_side": "assets/monkey/monkey_side.png",
+"monkey_idle_angry": "assets/monkey/monkey_idle_angry.png",
+"monkey_idle_mask": "assets/monkey/monkey_idle_mask.png",
+"monkey_jump_up": "assets/monkey/monkey_jump_up.png",
+"monkey_jump_happy": "assets/monkey/monkey_jump_happy.png",
+"monkey_jump_attack2": "assets/monkey/monkey_jump_attack2.png"
+},
+"obstacles": {
+"obstacle_cone": "assets/obstacles/obstacle_cone.png",
+"obstacle_barrier": "assets/obstacles/obstacle_barrier.png",
+"obstacle_boat": "assets/obstacles/obstacle_boat.png",
+"obstacle_bush": "assets/obstacles/obstacle_bush.png",
+"obstacle_puddle": "assets/obstacles/obstacle_puddle.png",
+"obstacle_water": "assets/obstacles/obstacle_water.png",
+"obstacle_car": "assets/obstacles/obstacle_car.png",
+"obstacle_tree": "assets/obstacles/obstacle_tree.png",
+"obstacle_crystal": "assets/obstacles/obstacle_crystal.png",
+"obstacle_hole": "assets/obstacles/obstacle_hole.png",
+"obstacle_box": "assets/obstacles/obstacle_box.png",
+"obstacle_ball": "assets/obstacles/obstacle_ball.png",
+"obstacle_beach_chair": "assets/obstacles/obstacle_beach_chair.png",
+"obstacle_bush_small": "assets/obstacles/obstacle_bush_small.png",
+"obstacle_bench": "assets/obstacles/obstacle_bench.png",
+"obstacle_sandcastle": "assets/obstacles/obstacle_sandcastle.png",
+"obstacle_sign": "assets/obstacles/obstacle_sign.png"
+},
+"ui": {
+"ui_paused": "assets/ui/ui_paused.png",
+"ui_monkey_start": "assets/ui/ui_monkey_start.png",
+"ui_time_remaining": "assets/ui/ui_time_remaining.png",
+"ui_game_over_text": "assets/ui/ui_game_over_text.png",
+"ui_game_over_monkey": "assets/ui/ui_game_over_monkey.png",
+"ui_paused_alt": "assets/ui/ui_paused_alt.png",
+"ui_main_menu": "assets/ui/ui_main_menu.png",
+"ui_scoreboard": "assets/ui/ui_scoreboard.png",
+"ui_settings": "assets/ui/ui_settings.png",
+"ui_enter_name": "assets/ui/ui_enter_name.png"
+}
+}
