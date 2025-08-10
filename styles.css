@@ -1,114 +1,36 @@
-:root{
-  --bg:#0b1512;
-  --glass:rgba(0,0,0,.35);
-  --white:#f2fff6;
-  --mint:#b9f6ca;
-  --lime:#d9ff6a;
-  --x:#111;
-  --tg:#2aa9e0;
-  --notion:#fff;
-  --ape:#ffcf5a;
+html,body {
+margin: 0;
+height: 100%;
+background: #0d1f0f;
+font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--white);
-  background: var(--bg);
+#game {
+display:block;
+width:100vw;
+height:100vh;
+background:#103a18;
 }
 
-/* Topbar */
-.topbar{
-  position:fixed; inset:0 0 auto 0; height:64px;
-  display:flex; align-items:center; padding:0 20px;
-  background: linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,0));
-  z-index:10;
+.hud{
+position:fixed; inset:16px 16px auto 16px;
+display:flex; justify-content:space-between; align-items:center;
+color:#ffd76a; text-shadow:0 2px 0 #4b3512;
+font-weight:700; pointer-events:none;
 }
-.logo{
-  font-weight:900; letter-spacing:.5px; text-transform:lowercase;
-  background: linear-gradient(90deg, #fff, var(--mint), var(--lime));
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  font-size:22px;
-}
+.hud span{ margin-right:14px; }
 
-/* Hero */
-.hero{
-  min-height:100vh;
-  background: radial-gradient(transparent, rgba(0,0,0,.6)),
-              url('assets/start_bg.png') center/cover no-repeat fixed;
-  display:grid; place-items:center; padding:110px 20px 40px;
+.overlay{
+position:fixed; inset:0; display:flex; flex-direction:column;
+align-items:center; justify-content:center; gap:16px;
+background:rgba(0,0,0,.35);
 }
-.hero__content{
-  width:100%; max-width:980px;
-  background: var(--glass);
-  backdrop-filter: blur(6px);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:18px;
-  padding:28px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.35);
-}
-
-.title{
-  margin:0 0 6px; font-size: clamp(28px, 4.2vw, 44px);
-  line-height:1.1;
-  text-shadow:0 2px 0 rgba(0,0,0,.35);
-}
-.subtitle{
-  margin:0 0 22px; opacity:.9; font-size:clamp(14px,2.2vw,18px);
-}
-
-/* Buttons grid */
-.cta-grid{
-  display:grid; gap:12px;
-  grid-template-columns: repeat(2, minmax(200px, 1fr));
-}
-@media (max-width:720px){
-  .cta-grid{ grid-template-columns: 1fr; }
-}
-
-/* Generic button */
+.overlay.hidden{ display:none; }
+.overlay img{ width:min(480px, 80vw); max-height:80vh; object-fit:contain; }
 .btn{
-  display:flex; align-items:center; justify-content:center; gap:10px;
-  padding:14px 16px; border-radius:14px; text-decoration:none; color:#001;
-  font-weight:800; cursor:pointer; user-select:none;
-  border:2px solid rgba(0,0,0,.15);
-  box-shadow: 0 8px 0 rgba(0,0,0,.25);
-  transform: translateY(0); transition:.12s ease;
+pointer-events:auto;
+padding:10px 18px; border:none; border-radius:10px;
+background:#ffb000; color:#422c10; font-weight:800; font-size:16px;
+box-shadow:0 6px 0 #714d13; cursor:pointer;
 }
-.btn:active{ transform: translateY(2px); box-shadow: 0 6px 0 rgba(0,0,0,.25); }
-
-.btn–play{ grid-column: 1 / -1; font-size:18px; background: linear-gradient(90deg, #ffe082, #ffd54f);
-  border-color:#d6a600; color:#2b1a00; }
-.btn–x{ background: linear-gradient(90deg, #151515, #303030); color:#fff; }
-.btn–tg{ background: linear-gradient(90deg, #2ec3ff, #1aa7e8); color:#002233; }
-.btn–notion{ background: linear-gradient(90deg, #fff, #f2f2f2); color:#111; }
-.btn–airdrop{ background: linear-gradient(90deg, #b9f6ca, #d9ff6a); color:#002d16; }
-
-/* Footer */
-.footer{
-  text-align:center; padding:16px; opacity:.75; font-size:13px;
-}
-code{ background: rgba(255,255,255,.08); padding:2px 6px; border-radius:6px; }
-#game .card {
-  margin-top: 12px;
-}
-#gameCanvas {
-  width: 100%;
-  max-width: 900px;
-  height: 350px;
-  border-radius: 12px;
-  display: block;
-  margin: 8px auto 0;
-  background: radial-gradient(ellipse at center, #0b1f1c 0%, #081614 60%, #06110f 100%);
-}
-#game .game-ctrls {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 8px;
-}
-#game .btn {
-  padding: 8px 14px;
-}
+.btn.hidden{ display:none; }
