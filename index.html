@@ -1,46 +1,31 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LazyApe Reboot</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="preload" href="assets/start_bg.png" as="image">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BlitzRun MVP</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="logo">lazyape</div>
-  </header>
+<canvas id="game"></canvas>
 
-  <main class="hero">
-    <div class="hero__content">
-      <h1 class="title">The Next Evolution in Web3 Gaming</h1>
-      <p class="subtitle">Join the LazyApe Reboot — a fun, community‑first token on Solana.</p>
+<!-- HUD -->
+<div class="hud">
+<div class="hud-left">
+<span>Score: <b id="score">0</b></span>
+<span>Coins: <b id="coins">0</b></span>
+</div>
+<div class="hud-right">
+<span>Press <b>Space</b> to Jump · <b>S</b> Slide · <b>K</b> Attack · <b>P</b> Pause</span>
+</div>
+</div>
 
-      <div class="cta-grid">
-        <a class="btn btn–play" id="btnPlay">▶ Play Game</a>
+<!-- Pause & GameOver overlays -->
+<div id="overlay" class="overlay hidden">
+<img id="overlay-img" alt="overlay" />
+<button id="btn-restart" class="btn hidden">Restart</button>
+</div>
 
-        <a class="btn btn–x" id="btnX">
-          <span>Join X — Get 200 Airdrop</span>
-        </a>
-
-        <a class="btn btn–tg" id="btnTG">
-          <span>Join Telegram — Get 200 Airdrop</span>
-        </a>
-
-        <a class="btn btn–notion" id="btnNotion">
-          <span>Join Notion — Get 200 Airdrop</span>
-        </a>
-
-        <a class="btn btn–airdrop" id="btnAirdrop">Join Airdrop</a>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div>© 2025 LazyApe Reboot • Solana • Contract: <code>8L313TJaRU59JPnJWqNh5T5jN81a1KaEkpLqdcT</code></div>
-  </footer>
-
-  <script defer src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
