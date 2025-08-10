@@ -7,23 +7,23 @@
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+<div id="stage">
 <canvas id="game"></canvas>
 
 <!-- HUD -->
-<div class="hud">
-<div class="hud-left">
+<div class="hud hud-left">
 <span>Score: <b id="score">0</b></span>
 <span>Coins: <b id="coins">0</b></span>
 </div>
-<div class="hud-right">
+<div class="hud hud-right">
 <span>Press <b>Space</b> to Jump · <b>S</b> Slide · <b>K</b> Attack · <b>P</b> Pause</span>
 </div>
-</div>
 
-<!-- Pause & GameOver overlays -->
-<div id="overlay" class="overlay hidden">
+<!-- Overlay (للبوز/الخسارة لاحقاً) -->
+<div id="overlay" class="hidden">
 <img id="overlay-img" alt="overlay" />
 <button id="btn-restart" class="btn hidden">Restart</button>
+</div>
 </div>
 
 <script src="app.js"></script>
