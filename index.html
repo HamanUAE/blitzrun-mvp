@@ -1,75 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BlitzRun MVP</title>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LazyApe Reboot</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" href="assets/start_bg.png" as="image">
 </head>
 <body>
-<div class="container">
-<h1>BlitzRun</h1>
+  <header class="topbar">
+    <div class="logo">lazyape</div>
+  </header>
 
-<!-- KPIs -->
-<div class="kpis">
-<div class="kpi">
-<div class="label">Coins</div>
-<div class="value" id="coins">0</div>
-</div>
-<div class="kpi">
-<div class="label">Airdrop (est.)</div>
-<div class="value" id="airdrop">0</div>
-</div>
-</div>
+  <main class="hero">
+    <div class="hero__content">
+      <h1 class="title">The Next Evolution in Web3 Gaming</h1>
+      <p class="subtitle">Join the LazyApe Reboot — a fun, community‑first token on Solana.</p>
 
-<!-- Today progress -->
-<div class="card">
-<h2>Today</h2>
-<div id="todayCount">0/5000</div>
-<div class="progress" style="margin:10px 0">
-<div id="todayProgress"></div>
-</div>
-<div class="actions">
-<button id="btn-run" class="btn">Run +10</button>
-<button id="btn-jump" class="btn">Jump +25</button>
-<button id="btn-sync" class="btn">Sync to DB</button>
-</div>
-</div>
+      <div class="cta-grid">
+        <a class="btn btn–play" id="btnPlay">▶ Play Game</a>
 
-<!-- Wallet -->
-<div class="card">
-<h2>Wallet</h2>
-<div class="wallet-row">
-<input id="walletInput" type="text" placeholder="Paste your Phantom address" />
-<button id="btn-save-wallet" class="btn">Save</button>
-</div>
-</div>
+        <a class="btn btn–x" id="btnX">
+          <span>Join X — Get 200 Airdrop</span>
+        </a>
 
-<!-- Referral -->
-<div class="card">
-<h2>Referral</h2>
-<div class="ref-row">
-<input id="refLink" type="text" readonly />
-<button id="btn-copy" class="btn">Copy</button>
-</div>
-<div class="links" style="margin-top:10px">
-<a href="#" id="link-x">X</a>
-<a href="#" id="link-telegram">Telegram</a>
-<a href="#" id="link-notion">Notion</a>
-<a href="#" id="link-presale">Presale</a>
-</div> <!-- نهاية referral -->
+        <a class="btn btn–tg" id="btnTG">
+          <span>Join Telegram — Get 200 Airdrop</span>
+        </a>
 
-<!-- Game (BlitzRun mini) -->
-<div class="card" id="game">
-<h2>BlitzRun (Preview)</h2>
-<canvas id="gameCanvas" width="900" height="350"></canvas>
-<div class="game-ctrls">
-<button id="g-run" class="btn">Run +10</button>
-<button id="g-jump" class="btn">Jump</button>
-</div>
-</div>
+        <a class="btn btn–notion" id="btnNotion">
+          <span>Join Notion — Get 200 Airdrop</span>
+        </a>
 
-<!-- JavaScript -->
-<script defer src="app.js"></script>
+        <a class="btn btn–airdrop" id="btnAirdrop">Join Airdrop</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div>© 2025 LazyApe Reboot • Solana • Contract: <code>8L313TJaRU59JPnJWqNh5T5jN81a1KaEkpLqdcT</code></div>
+  </footer>
+
+  <script defer src="app.js"></script>
 </body>
 </html>
