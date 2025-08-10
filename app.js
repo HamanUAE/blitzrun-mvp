@@ -21,18 +21,25 @@ let running = true;
 /* ---- Canvas ---- */
 const CANVAS = document.getElementById("game");
 const CTX = CANVAS.getContext("2d");
+let VIEW_W = 0, VIEW_H = 0, DPR = 1;
+const CANVAS = document.getElementById('game');
+const CTX = CANVAS.getContext('2d');
+
 function resize() {
-const w = window.innerWidth;
-const h = window.innerHeight;
-if (w / h > GAME_RATIO) {
-CANVAS.height = h;
-CANVAS.width = Math.floor(h * GAME_RATIO);
-} else {
-CANVAS.width = w;
-CANVAS.height = Math.floor(w / GAME_RATIO);
+VIEW_W = window.innerWidth;
+VIEW_H = window.innerHeight;
+DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+CANVAS.style.width = VIEW_W + 'px';
+CANVAS.style.height = VIEW_H + 'px';
+CANVAS.width = Math.floor(VIEW_W * DPR);
+CANVAS.height = Math.floor(VIEW_H * DPR);
+
+CTX.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
-}
-resize(); window.addEventListener("resize", resize);
+
+resize();
+window.addEventListener('resize', resize);
 
 /* ---- Utils ---- */
 function loadImage(path) {
