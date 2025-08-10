@@ -6,6 +6,7 @@
 "bg_forest_path": "assets/backgrounds/bg_forest_path.png",
 "bg_ground_tiles": "assets/backgrounds/bg_ground_tiles.png"
 },
+
 "collectable": {
 "collect_banana": "assets/collectable/collect_banana.png",
 "collect_rollerskates": "assets/collectable/collect_rollerskates.png",
@@ -13,14 +14,16 @@
 "collect_jetpack": "assets/collectable/collect_jetpack.png",
 "collect_coins": "assets/collectable/collect_coins.png"
 },
+
 "extra": {
-"extra_countdown": "assets/extra_countdown_timer_3.png",
-"extra_referral_bonus": "assets/extra/extra_referral_bonus.png",
-"extra_loading": "assets/extra/extra_loading.png",
-"extra_victory": "assets/extra/extra_victory.png",
-"extra_daily_rewards": "assets/extra/extra_daily_rewards.png",
-"extra_alphabet": "assets/extra/extra_alphabet.png"
+"extra_countdown": "assets/extra/countdown_timer_3.png",
+"extra_referral_bonus": "assets/extra/bonus_referral.png",
+"extra_loading": "assets/extra/loading_screen.png",
+"extra_victory": "assets/extra/victory_screen.png",
+"extra_daily_rewards": "assets/extra/daily_rewards.png",
+"extra_powerups": "assets/extra/powerup_icons.png"
 },
+
 "icons": {
 "icon_fireball": "assets/icons/icon_fireball.png",
 "icon_mask": "assets/icons/icon_mask.png",
@@ -28,6 +31,7 @@
 "icon_explosion_small": "assets/icons/icon_explosion_small.png",
 "icon_stars": "assets/icons/icon_stars.png"
 },
+
 "monkey": {
 "monkey_attack_mask1": "assets/monkey/monkey_attack_mask1.png",
 "monkey_idle_happy": "assets/monkey/monkey_idle_happy.png",
@@ -42,25 +46,26 @@
 "monkey_jump_happy": "assets/monkey/monkey_jump_happy.png",
 "monkey_jump_attack2": "assets/monkey/monkey_jump_attack2.png"
 },
+
 "obstacles": {
-"obstacle_cone": "assets/obstacles/obstacle_traffic_cone.png",
-"obstacle_barrier": "assets/obstacles/obstacle_crate_street.png",
-"obstacle_boat": "assets/obstacles/obstacle_boat_beach.png",
-"obstacle_bush": "assets/obstacles/obstacle_bush.png",
-"obstacle_puddle": "assets/obstacles/obstacle_water_puddle.png",
-"obstacle_water": "assets/obstacles/obstacle_water_puddle.png",
-"obstacle_car": "assets/obstacles/obstacle_blue_car.png",
-"obstacle_tree": "assets/obstacles/obstacle_fallen_tree.png",
-"obstacle_crystal": "assets/obstacles/obstacle_crystal_blue.png",
-"obstacle_hole": "assets/obstacles/obstacle_trash_road.png",
-"obstacle_box": "assets/obstacles/obstacle_crate_box.png",
-"obstacle_ball": "assets/obstacles/obstacle_beach_ball.png",
+"obstacle_beach_ball": "assets/obstacles/obstacle_beach_ball.png",
 "obstacle_beach_chair": "assets/obstacles/obstacle_beach_chair.png",
-"obstacle_bush_small": "assets/obstacles/obstacle_fruits.png",
-"obstacle_bench": "assets/obstacles/obstacle_crate_tall.png",
+"obstacle_blue_car": "assets/obstacles/obstacle_blue_car.png",
+"obstacle_boat_beach": "assets/obstacles/obstacle_boat_beach.png",
+"obstacle_bush": "assets/obstacles/obstacle_bush.png",
+"obstacle_crate_box": "assets/obstacles/obstacle_crate_box.png",
+"obstacle_crate_street": "assets/obstacles/obstacle_crate_street.png",
+"obstacle_crate_tall": "assets/obstacles/obstacle_crate_tall.png",
+"obstacle_crystal_blue": "assets/obstacles/obstacle_crystal_blue.png",
+"obstacle_fallen_tree": "assets/obstacles/obstacle_fallen_tree.png",
+"obstacle_fruits": "assets/obstacles/obstacle_fruits.png",
 "obstacle_sandcastle": "assets/obstacles/obstacle_sandcastle.png",
-"obstacle_sign": "assets/obstacles/obstacle_signboard.png"
-}
+"obstacle_signboard": "assets/obstacles/obstacle_signboard.png",
+"obstacle_traffic_cone": "assets/obstacles/obstacle_traffic_cone.png",
+"obstacle_trash_road": "assets/obstacles/obstacle_trash_road.png",
+"obstacle_water_puddle": "assets/obstacles/obstacle_water_puddle.png"
+},
+
 "ui": {
 "ui_paused": "assets/ui/ui_paused.png",
 "ui_monkey_start": "assets/ui/ui_monkey_start.png",
