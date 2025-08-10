@@ -1,36 +1,67 @@
-html,body {
-margin: 0;
+:root {
+--hud-color: #ffcc66;
+}
+
+* { box-sizing: border-box; }
+html, body {
 height: 100%;
-background: #0d1f0f;
+margin: 0;
+background:#0b0f0b;
+color: #eee;
 font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-#game {
-display:block;
-width:100vw;
-height:100vh;
-background:#103a18;
+#stage {
+position: fixed;
+inset: 0;
+display: grid;
+place-items: center;
+overflow: hidden;
 }
 
-.hud{
-position:fixed; inset:16px 16px auto 16px;
-display:flex; justify-content:space-between; align-items:center;
-color:#ffd76a; text-shadow:0 2px 0 #4b3512;
-font-weight:700; pointer-events:none;
+canvas#game {
+display: block;
+/* سيتم ضبط حجمه وتمركزه عبر JS */
+background: #123812; /* لون احتياطي قبل تحميل الخلفية */
+border-radius: 6px;
 }
-.hud span{ margin-right:14px; }
 
-.overlay{
-position:fixed; inset:0; display:flex; flex-direction:column;
-align-items:center; justify-content:center; gap:16px;
-background:rgba(0,0,0,.35);
+.hud {
+position: fixed;
+top: 8px;
+left: 8px;
+right: 8px;
+display: flex;
+justify-content: space-between;
+pointer-events: none;
+mix-blend-mode: normal;
+text-shadow: 0 2px 2px #0008;
+font-weight: 700;
+color: var(--hud-color);
 }
-.overlay.hidden{ display:none; }
-.overlay img{ width:min(480px, 80vw); max-height:80vh; object-fit:contain; }
-.btn{
-pointer-events:auto;
-padding:10px 18px; border:none; border-radius:10px;
-background:#ffb000; color:#422c10; font-weight:800; font-size:16px;
-box-shadow:0 6px 0 #714d13; cursor:pointer;
+
+.hud-left { justify-content: flex-start; gap: 16px; }
+.hud-right { justify-content: flex-end; }
+
+#overlay {
+position: fixed;
+inset: 0;
+background: #000a;
+display: grid;
+place-items: center;
 }
-.btn.hidden{ display:none; }
+#overlay.hidden { display: none; }
+
+#overlay img { max-width: 80vw; max-height: 80vh; }
+
+.btn {
+margin-top: 16px;
+padding: 10px 16px;
+font-weight: 700;
+border: 0;
+border-radius: 6px;
+background: #35c46a;
+color: #08150a;
+cursor: pointer;
+}
+.btn.hidden { display: none; }
