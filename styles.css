@@ -91,3 +91,24 @@ body{
   text-align:center; padding:16px; opacity:.75; font-size:13px;
 }
 code{ background: rgba(255,255,255,.08); padding:2px 6px; border-radius:6px; }
+#game .card {
+  margin-top: 12px;
+}
+#gameCanvas {
+  width: 100%;
+  max-width: 900px;
+  height: 350px;
+  border-radius: 12px;
+  display: block;
+  margin: 8px auto 0;
+  background: radial-gradient(ellipse at center, #0b1f1c 0%, #081614 60%, #06110f 100%);
+}
+#game .game-ctrls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
+}
+#game .btn {
+  padding: 8px 14px;
+}
