@@ -14,7 +14,7 @@
 "collect_coins": "assets/collectable/collect_coins.png"
 },
 "extra": {
-"extra_countdown": "assets/extra/extra_countdown.png",
+"extra_countdown": "assets/extra_countdown_timer_3.png",
 "extra_referral_bonus": "assets/extra/extra_referral_bonus.png",
 "extra_loading": "assets/extra/extra_loading.png",
 "extra_victory": "assets/extra/extra_victory.png",
